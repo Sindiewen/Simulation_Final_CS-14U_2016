@@ -1,0 +1,111 @@
+Rachel Vancleave
+10/22/16
+
+Simulation Proposal Revised Draft
+
+Theme: heartrate Driven 
+Question/Problem to Solve:
+    - With the Heart-rate of an actor, find the most optimal route to
+        the destination without exceeding the actors heart-rate threshold
+        with the folling parameters:
+        - Actor's...
+            maxBPM (max heartrate)
+            actorAge (actor's age)
+    - Program will calculate the actor's currentBPM and their idleBPM
+        - WIll increase BPM while climbing,
+        - Will Decrese while decending, being idle, waking on a flat path
+            
+List of Actors:
+
+    - Hiker             : Yellow Capsule       
+        - Above average heart-rate
+        - WIll take more moderate routes
+        
+    - Body Builder      : Red Capsule 
+        - Walks with weights and does exercies while jogging 
+        - Very High Heart-rate
+            - Will take hardest routes
+
+    - Florist           : Green Capsule
+        - Will "Stop and smell the flowers"
+            - Takes the time to look at the beauty their surroundings
+        - Calm
+        - Will take more relaxed routes
+        - average Heart-Rate
+
+    - Business Worker   : Blue Capsule
+        - Usually stuck in traffic/public transportation
+            - Gets angry at how slowly everything moves around Theme
+        - Will always take the most direct route But be compromised by heartrate
+            - Will avoid hills
+        - Below average heartrate
+
+//////// Actor Values ////////
+
+    Heart-Rate - Threshold :        maxBPM
+        - The max heartrate of the actor before they start taking less demanding routes
+            - Threshold Slider : Actor
+                - 40 BPM Minimum to 220 BPM max
+                
+    Heart-Rate - Heartrate cost:    costBPM
+        - The heart-rate cost to traverse obstacle
+            + "heart-rate cost" adds a value to the actor's current heart-rate
+            - "Heart-rate cost" Subtracts a value to the actor's current heart-rate
+
+    HeartRate - Current Heartrate:  currentBPM
+        - the current actor's heartrate
+
+    HeartRate - Actor idleBPM:      idleBPM
+        - The idle BPM of the actor
+            - Will stay at this BPM when the actor is idle/doing easier tasks
+            
+    Age - Actor:                    actorAge
+        - Stores the current actor Age
+        
+    Idle Time - Actor:              actorIdleTime
+    - How long the actor has to stay idle to get back to a resonable heartrate
+        - (max heartrate - actor age) = "safeBPM" to return to
+        - If (currentBPM >= safeBPM)
+            - Idle the actor
+    - How long the actor needs to idle:
+        - -1 BPM per 1-3 seconds untill actor's idleBPM
+
+    Probability of prefered Route:  probabilityOfPreferedRoute
+        - Uses a value of percentages:
+            - 0% - 100% in increments of 10%
+        - How often, the probability of an actor taking prefered route over harder route
+            - Higher the percentage, the higher chance of taking a harder route
+        - NOTE: This value is independent of their personality
+
+
+//////// Pathway Values ////////
+
+    Elevation   :
+        - How high the hill/path is
+            - How high the Height/elevation of the path increases the currentBPM of the actor 
+            - Calculated by Z Rotation
+                - If elevationBPM >= maxBPM
+                    - Actor doesnt bother climbing, goes different direction
+                    - UNLESS it's the cheapest, only route forward, then actor will proceed and 
+                    idle at end of route till safeBPM reached
+
+    Distance Traveled - Actor's distance traveled : 
+        - The longer the distance, over time, the actor's heart-rate will increase.
+            - Calculated by the unity units from their origin to their current distance
+            - HR Increase calculuated by the unity distance units
+                - Can be set by user for how many units for 1 BPM
+
+    
+Results:
+
+    - Start Node
+    - Goal Node
+    - Distance Traveled by Actor
+    - Time idled (if any)
+    - Current HeartRate
+    - Average heartrate
+    - Highest Heartrate reached
+    
+    Compare data with other actors. See who was more efficient and faster getting to location
+    
+   
