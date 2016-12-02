@@ -259,7 +259,7 @@ public class Dijkstra
 		float personalityCost = (1f - compatibility);
 
 		// using personalityCost * baseCost means "the traveler's emotions can make anything easy or anything hard"
-		return (personalityCost * baseCost);
+		return baseCost;//(personalityCost * baseCost);
 	}
 	/*
 	 * 

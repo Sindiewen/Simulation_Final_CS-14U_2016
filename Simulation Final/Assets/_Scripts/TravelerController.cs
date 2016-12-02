@@ -76,6 +76,11 @@ public class TravelerController : MonoBehaviour
 		//algorithm.Actor = this;
 
 		algorithm = new Dijkstra(this);
+
+
+		// Sets the current bpm to the idle
+		currentBPM = idleDefaultBPM;
+		Debug.Log("Start: " + currentBPM);
 	}
 
 
@@ -154,7 +159,15 @@ public class TravelerController : MonoBehaviour
 		// TODO:: Create totalEdgeCostBPM[]. Store each cost into an array.
 		// EVery time actor traverses an edge, add 1 value to the currentBpm.
 		// Remove value from array.
-		currentBPM += (int)cost;
+
+		//TODO: Instead of an array, use a queue (LIFO), so that an 
+		//currentBPM += (int)cost;
+
+		// TODO: Ask Erez how to scale the base cost value to BPM
+
+		// Gives both positive and negative numbers
+		currentBPM = (int)cost * 2;
+		Debug.Log(currentBPM);
 	}
 	
 
