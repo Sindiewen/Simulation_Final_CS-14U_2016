@@ -59,8 +59,7 @@ public class TravelerController : MonoBehaviour
 	// Dijkstra values
 	private const float DELTA = 0.01f; // any two values this close are effectively the same value
 	private PathData path;
-	private Dijkstra algorithm;// = new Dijkstra(this);
-
+	private Dijkstra algorithm;
 
 	void Start()
 	{
@@ -74,7 +73,6 @@ public class TravelerController : MonoBehaviour
 
 
 		//algorithm.Actor = this;
-
 		algorithm = new Dijkstra(this);
 
 
@@ -156,6 +154,7 @@ public class TravelerController : MonoBehaviour
 	// Sets the current BPM
 	public void setCurBPM(float cost)
 	{
+
 		// TODO:: Create totalEdgeCostBPM[]. Store each cost into an array.
 		// EVery time actor traverses an edge, add 1 value to the currentBpm.
 		// Remove value from array.

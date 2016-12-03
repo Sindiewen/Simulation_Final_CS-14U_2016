@@ -15,14 +15,18 @@ public class EdgeScript : MonoBehaviour
 
 	[Header("Actor Traversal")]
 	// 1 = does not like, -1 = likes
+    /*
 	[Range(-1f,1f)]public float PedestrianFriendly = 0f; // <- rename one of these to Heart? Just to save myself from retyping each value in the editor?
 	[Range(-1f,1f)]public float BicyclistFriendly = 0f;
 	[Range(-1f,1f)]public float CarFriendly = 0f;
 	[Range(-1f,1f)]public float Beautiful = 0f;
 	[Range(-1f,1f)]public float FoodAvailable = 0f;
+    */
 
-	// Heart value
-	[Range(-1f,1f)]public float Heart = 0f;
+    [Range(-1f, 1f)]public float HikingFriendly     = 0f;
+    [Range(-1f, 1f)]public float BodyBuilding       = 0f;
+    [Range(-1f, 1f)]public float Beauty             = 0f;
+    [Range(-1f, 1f)]public float DirectRoute        = 0f;
 
 	public bool Stretch = true;
 

@@ -52,7 +52,7 @@ public class Dijkstra
 
 		if (traveler == null)
 		{
-			traveler = TravelerProfileCatalog.GetProfile(TravelerProfileCatalog.TravelerType.Heart); // <- Setting defaults to heart
+			traveler = TravelerProfileCatalog.GetProfile(TravelerProfileCatalog.TravelerType.Neutral); // <- Setting default to neutral
 		}
 
 		PriorityQueue<VertexWrapper> priorityQueue = new PriorityQueue<VertexWrapper> ();
@@ -239,8 +239,9 @@ public class Dijkstra
 			Traveler = TravelerProfileCatalog.GetProfile (TravelerProfileCatalog.TravelerType.Neutral);
 		}
 
-		// if profile is not null use the average of the trait indexes (which will be -1 to 1)
-		// but if profile is null then just use zero
+        // if profile is not null use the average of the trait indexes (which will be -1 to 1)
+        // but if profile is null then just use zero
+        /*
 		float compatibility = (Traveler != null
 			?  (Traveler.LikesToWalk * edge.PedestrianFriendly +
 				Traveler.LikesToBicycle * edge.BicyclistFriendly +
@@ -250,6 +251,15 @@ public class Dijkstra
 				Traveler.LikesHeart * edge.Heart) / 5f
 
 			: 0f);
+            */
+        float compatibility = (Traveler != null ?
+            (
+                Traveler.LikesHiking * edge.HikingFriendly +
+                Traveler.LikesBodyBuilding * edge.BodyBuilding +
+                Traveler.LikesBeauty * edge.Beauty +
+                Traveler.LikesBusiness * edge.DirectRoute
+            ) / 5f 
+                : 0f);
 
 		// (1 - compatibility) gives a value that is 0 (good) to 2 (bad)
 		// this translates to:

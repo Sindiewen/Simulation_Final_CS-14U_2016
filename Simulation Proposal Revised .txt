@@ -17,6 +17,10 @@ Question/Problem to Solve:
             
 List of Actors:
 
+    - Neutral Actor     : White Capsule
+        - Contol Actor
+        - As if nothing drives them. Default
+
     - Hiker             : Yellow Capsule       
         - Above average heart-rate
         - WIll take more moderate routes
