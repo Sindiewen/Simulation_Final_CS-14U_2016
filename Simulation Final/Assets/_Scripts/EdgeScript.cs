@@ -15,19 +15,12 @@ public class EdgeScript : MonoBehaviour
 
 	[Header("Actor Traversal")]
 	// 1 = does not like, -1 = likes
-    /*
-	[Range(-1f,1f)]public float PedestrianFriendly = 0f; // <- rename one of these to Heart? Just to save myself from retyping each value in the editor?
-	[Range(-1f,1f)]public float BicyclistFriendly = 0f;
-	[Range(-1f,1f)]public float CarFriendly = 0f;
-	[Range(-1f,1f)]public float Beautiful = 0f;
-	[Range(-1f,1f)]public float FoodAvailable = 0f;
-    */
-
     [Range(-1f, 1f)]public float HikingFriendly     = 0f;
     [Range(-1f, 1f)]public float BodyBuilding       = 0f;
     [Range(-1f, 1f)]public float Beauty             = 0f;
     [Range(-1f, 1f)]public float DirectRoute        = 0f;
 
+    // Weather the edge can stretch
 	public bool Stretch = true;
 
 	void Start()
@@ -43,6 +36,8 @@ public class EdgeScript : MonoBehaviour
 
 		Renderer renderer = GetComponent<Renderer> ();
 		renderer.sharedMaterial = singletons.GetComponent<GraphVisuals> ().EdgeUnvisitedMaterial;
+
+        
 	}
 
 	void Update ()
@@ -53,6 +48,7 @@ public class EdgeScript : MonoBehaviour
 		}
 	}
 
+    // Stretches the edge between 2 vertices
 	public void StretchEdgeBetweenTwoVertices(Vector3 vertexPositionA, Vector3 vertexPositionB)
 	{
 		transform.position = Vector3.Lerp (vertexPositionA, vertexPositionB, 0.5f);
@@ -62,16 +58,19 @@ public class EdgeScript : MonoBehaviour
 		transform.Rotate(90, 0, 0);
 	}
 
+    // On Trigger Enter: Checks is edge is connected to a vertex
 	void OnTriggerEnter(Collider other)
 	{
 		CheckAndAddVertexToEdge (other);
 	}
 
+    // On Trigger Exit: Removes vertex from edge if not connected
 	void OnTriggerExit(Collider other)
 	{
 		CheckAndRemoveVertexFromEdge (other);
 	}
 
+    //
 	public void CheckAndAddVertexToEdge(Collider other)
 	{
 		if (!other) // shorthand for (other == null)
@@ -97,6 +96,7 @@ public class EdgeScript : MonoBehaviour
 		}
 	}
 
+    //
 	public void CheckAndRemoveVertexFromEdge(Collider other)
 	{
 		if (!other) // shorthand for (other == null)
@@ -117,8 +117,8 @@ public class EdgeScript : MonoBehaviour
 			}
 		}
 	}
-	
-
+    
+    //
 	public VertexScript GetOtherVertex(VertexScript vertex)
 	{
         VertexScript value = null;

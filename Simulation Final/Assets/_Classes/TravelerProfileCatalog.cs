@@ -28,24 +28,6 @@ public class TravelerProfileCatalog
 
 	public static void Initialize()
 	{
-        /*
-		if (!profileDict.ContainsKey (TravelerType.Bicyclist))
-		{
-			profileDict [TravelerType.Bicyclist] = new TravelerProfile (0f, 1f, -1f, 0.25f, 0.5f, 0f);
-		}
-		if (!profileDict.ContainsKey (TravelerType.CityDriver))
-		{
-			profileDict [TravelerType.CityDriver] = new TravelerProfile (0f, -1f, 1f, 0f, 0f, 0f);
-		}
-		
-		if (!profileDict.ContainsKey (TravelerType.VacationDriver))
-		{
-			profileDict [TravelerType.VacationDriver] = new TravelerProfile (0f, 0f, 0.75f, 1f, 1f, 0f);
-		}*/
-
-
-
-
 		//////////////////////////////////////////////
         // Neutral Actor: Base case
 		if (!profileDict.ContainsKey (TravelerType.Neutral))
@@ -76,12 +58,6 @@ public class TravelerProfileCatalog
         {
             profileDict[TravelerType.BusinessWorker] = new TravelerProfile();
         }
-
-        
 		//////////////////////////////////////////////
-	}
-
-	private TravelerProfileCatalog ()
-	{
 	}
 }
