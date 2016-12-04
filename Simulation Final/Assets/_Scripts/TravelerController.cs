@@ -28,8 +28,8 @@ public class TravelerController : MonoBehaviour
 	[Range(40, 220)] public int maxBPM;			// Threshold: Stores a value of the actor's max BPM before they 
 												// can/cannot continue anymore untill they reach their idleBPM
 
-	//public int actorIdleTime;					// How long the actor has to wait before they get to a safe BPM
-	[Range(1, 5)] public int timePerBPM;		// Stores value for how long each 1 BPM = 1 second
+	public float actorIdleTime;		    			// Value for how many seconds to decrement a bpm
+	[Range(1, 5)] public int BPMDecrementValue;		// How many BPM to decrement per second
 
 	public int safeBPM;							// Stores the actor's safe BPM - their (maxBPM - actorAge)
 												// A value for when the actor feels "safe" to continue moving
@@ -62,14 +62,39 @@ public class TravelerController : MonoBehaviour
 	private PathData path;
 	private Dijkstra algorithm;
 
-   
+    // Variables to start Dijkstra
+    private bool dijkstraIsRunning;
+    private bool dijkstraHasPath;
+
+    // If decrementing currentBPM has ran already
+    private bool decrementHasRan;
+ 
+
+    // Temp Values:
+    // For swapping node values
+    private VertexScript tempGoalNode;
+    private VertexScript tempStartNode;
+
 
 	void Start()
 	{
-		// Variable initialization
+        // Variable initialization
+        // Dijkstra Values
 
-		// Gets how long the actor needs to wait before their ok to move again
-		//actorIdleTime = timePerBPM;
+        // Dijkstra is not running;
+        dijkstraIsRunning = false;
+
+        // Dijkstra has does not have a path yet
+        dijkstraHasPath = false;
+
+        
+
+
+        // decrement has ran
+        decrementHasRan = false;
+
+
+
 
 		// Calculates the actor's safe BPM
 		safeBPM = maxBPM - actorAge;
@@ -98,14 +123,26 @@ public class TravelerController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+
+        // Always checks to ensure the actor is at a safeBPM
+        safeBPMCheck();
+
 		// If there is a startNode and a Goal node
 		if (StartNode != null && GoalNode != null)
 		{
 			// have somewhere to go
 			if (path == null || path.StartNode != StartNode || path.GoalNode != GoalNode)
 			{
-				// either have no path yet or path data is stale (no longer correct) so get new path
-				path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
+
+                // Checks if Dijkstra has already ran before
+                if (dijkstraIsRunning == false && dijkstraHasPath == false)
+                {
+                    // runs Dijkstra's algorithm
+                    runDijkstra();
+                }
+
+
+                
 
 
 				if (path != null && path.GetCurrentVertex () != null && StartAtStartNode)
@@ -115,14 +152,18 @@ public class TravelerController : MonoBehaviour
 				}
 			}
 
+
+
+            /*
             // Sets the current node as the start node
-            if (CurrentNode == GoalNode)
+            if (CurrentNode == GoalNode && )
             {
                 StartNode = GoalNode;
             }
             // If (The actor has arrived at the goal node)
             // - Set startNode to Goal Node
             //
+            */
 		}
 		else
 		{
@@ -130,6 +171,8 @@ public class TravelerController : MonoBehaviour
 			path = null;
 		}
 
+
+        // If the actor can move
 		if (Move && path != null && path.GetCurrentVertex() != null)
 		{
 			VertexScript nextNode = path.GetCurrentVertex (); // <- In PathData.cs, returns the current vertex
@@ -169,8 +212,86 @@ public class TravelerController : MonoBehaviour
 		}
 	}
 
-    // When the actor triggers another object
+
+    // Moved running dijkstra inside this function to allow re-running easily
+    void runDijkstra()
+    {
+        // Dijkstra is running
+        dijkstraIsRunning = true;
+
+        // either have no path yet or path data is stale (no longer correct) so get new path
+        path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
+
+        //Dijkstra is not running
+        dijkstraIsRunning = false;
+
+        // Actor now has a path to use
+        dijkstraHasPath = true;
+
+    }
+
+    void safeBPMCheck()
+    {
+        // If the currentBPM is >= to the maxBPM the actor can have
+        if (currentBPM >= maxBPM)
+        {
+
+            // Sets the current node to the start node
+            StartNode = CurrentNode;
+
+            // If the decrement coroutine has ran or not 
+            if (decrementHasRan == false)
+            {
+                // Sets decrementHasRan to true
+                decrementHasRan = true;
+
+                // Actor cannot move
+                Move = false;
+
+                // Starts BPMdecrement Coroutine
+                StartCoroutine(DecrementCurrentBPMToSafeBPM());
+            }
+       }
+    }
+
+    IEnumerator DecrementCurrentBPMToSafeBPM()
+    {
+        // Decrements currentBPM untill at a safeBPM
+        while (currentBPM >= safeBPM)
+        {
+            // Waits a specified time before the actor's BPM can decrement
+            yield return new WaitForSeconds(actorIdleTime);
+
+            // Decrements the actors currentBPM by the BPMDecrementValue
+            currentBPM -= BPMDecrementValue;
+
+            // Prints value to console
+            Debug.Log("New CurrentBPM: " + currentBPM);
+        }
+        // Reruns dijkstra to ensure we get a newer, more updated path
+        runDijkstra();
+
+        // The actor can move again
+        Move = true;
+
+        // Resets decrement has ran to false
+        decrementHasRan = false;
+    }
+
+
     void OnTriggerEnter(Collider col)
+    {
+        // Gets the current node
+        if(col.gameObject.tag == ("Node"))
+        {
+            GameObject thisCurrentNode = col.gameObject;
+            CurrentNode = thisCurrentNode.GetComponent<VertexScript>();
+        }
+    }
+
+
+    // When the actor Exits the trigger another object
+    void OnTriggerExit(Collider col)
     {
         // If the Actor colides with an object of tag "Edge"
         if(col.gameObject.tag == ("Edge"))
@@ -182,12 +303,7 @@ public class TravelerController : MonoBehaviour
             setCurBPM(collidedEdge.GetComponent<EdgeScript>().costBPM);
         }
 
-        // Gets the current node
-        if(col.gameObject.tag == ("Node"))
-        {
-            GameObject thisCurrentNode = col.gameObject;
-            CurrentNode = thisCurrentNode.GetComponent<VertexScript>();
-        }
+        
     }
 
 	// Sets the current BPM
@@ -197,7 +313,7 @@ public class TravelerController : MonoBehaviour
 
 		// Gives both positive and negative numbers
 		currentBPM += cost;
-		Debug.Log("CurrentBPM: " + currentBPM);
+		//Debug.Log("CurrentBPM: " + currentBPM);
 	}
 
     
