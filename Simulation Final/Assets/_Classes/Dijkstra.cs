@@ -94,7 +94,7 @@ public class Dijkstra
 
 						// returns the edge cost //
 						float cost = GetCost (nodeWrapper, otherNodeWrapper, edge, costMethod, traveler, startNode, goalNode);
-						actor.setCurBPM(cost);
+						//actor.setCurBPM(cost);
 
 						// // // // // // // // //
 

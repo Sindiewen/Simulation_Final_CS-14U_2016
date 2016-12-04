@@ -21,8 +21,8 @@ public class TravelerController : MonoBehaviour
 	[Header("Actor Heartrate Values")]
 	public int actorAge;						// Stores the actor's current age
 
-	public int currentBPM = 0;					// Stores the actor's current BPM
-	public int idleDefaultBPM = 90;				// Stores the actor's idleBPM - DEFAULT BPM OF ACTOR
+	public int currentBPM;					    // Stores the actor's current BPM
+	public int idleDefaultBPM;				    // Stores the actor's idleBPM - DEFAULT BPM OF ACTOR
 												// The current BPM when the actor is doing nothing
 
 	[Range(40, 220)] public int maxBPM;			// Threshold: Stores a value of the actor's max BPM before they 
@@ -61,6 +61,8 @@ public class TravelerController : MonoBehaviour
 	private PathData path;
 	private Dijkstra algorithm;
 
+   
+
 	void Start()
 	{
 		// Variable initialization
@@ -81,6 +83,12 @@ public class TravelerController : MonoBehaviour
 		Debug.Log("Start: " + currentBPM);
 	}
 
+    // Ensures when the game quits (either game window closed, or editor play mode ended...
+    // CurrentBPM is reset to 0.
+    void OnApplicationWQuit()
+    {
+        currentBPM = 0;
+    }
 
 	///////////////////////////////////
 	/// Here Lies the Dijkstra Call ///
@@ -151,8 +159,23 @@ public class TravelerController : MonoBehaviour
 		}
 	}
 
+void OnTriggerEnter(Collider col)
+    {
+        /* TODO:
+         * Check if actor collided with an edge.
+         * If they do - Get the cost from that edge, and add it to this actor's currentBPM.
+         */
+
+        if(col.gameObject.tag == ("Edge"))
+        {
+            Debug.Log("Successfully Compaired Edge Tag");
+            GameObject collidedEdge = col.gameObject;
+            setCurBPM(collidedEdge.GetComponent<EdgeScript>().costBPM);
+        }
+    }
+
 	// Sets the current BPM
-	public void setCurBPM(float cost)
+	void setCurBPM(int cost)
 	{
 
 		// TODO:: Create totalEdgeCostBPM[]. Store each cost into an array.
@@ -165,9 +188,11 @@ public class TravelerController : MonoBehaviour
 		// TODO: Ask Erez how to scale the base cost value to BPM
 
 		// Gives both positive and negative numbers
-		currentBPM = (int)cost * 2;
-		Debug.Log(currentBPM);
+		currentBPM += cost;
+		Debug.Log("CurrentBPM: " + currentBPM);
 	}
+
+    
 	
 
 
