@@ -47,7 +47,8 @@ public class TravelerController : MonoBehaviour
 	[Header("Node Locations")]
 	public VertexScript StartNode;		// Stores the start node
 	public VertexScript GoalNode;		// Stores the goal node
-	public VertexScript currentNode;	// Stores the current node
+	public VertexScript NextNode;	    // Stores the Next node
+    public VertexScript CurrentNode;    // Stores the current Node
 
 	public Vector3 FacingDirection;
 
@@ -97,7 +98,7 @@ public class TravelerController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		// If there is not startNode and no Goal node
+		// If there is a startNode and a Goal node
 		if (StartNode != null && GoalNode != null)
 		{
 			// have somewhere to go
@@ -113,6 +114,15 @@ public class TravelerController : MonoBehaviour
 					StartAtStartNode = false;
 				}
 			}
+
+            // Sets the current node as the start node
+            if (CurrentNode == GoalNode)
+            {
+                StartNode = GoalNode;
+            }
+            // If (The actor has arrived at the goal node)
+            // - Set startNode to Goal Node
+            //
 		}
 		else
 		{
@@ -124,7 +134,7 @@ public class TravelerController : MonoBehaviour
 		{
 			VertexScript nextNode = path.GetCurrentVertex (); // <- In PathData.cs, returns the current vertex
 
-			currentNode = path.GetCurrentVertex();			// returns the current vertex the actor is at
+			NextNode = path.GetCurrentVertex();			// returns the current vertex the actor is at
 			// TODO: Upon getting current vertex, if the actors heartrate > maxBPM
 			// Wait untill heartrate is at safe BPM
 			// after reaching safe BPM, continue with movement
@@ -159,32 +169,30 @@ public class TravelerController : MonoBehaviour
 		}
 	}
 
-void OnTriggerEnter(Collider col)
+    // When the actor triggers another object
+    void OnTriggerEnter(Collider col)
     {
-        /* TODO:
-         * Check if actor collided with an edge.
-         * If they do - Get the cost from that edge, and add it to this actor's currentBPM.
-         */
-
+        // If the Actor colides with an object of tag "Edge"
         if(col.gameObject.tag == ("Edge"))
         {
-            Debug.Log("Successfully Compaired Edge Tag");
+            // Creates a Collided Edge GameObject
             GameObject collidedEdge = col.gameObject;
+
+            // Gets the EdgeScript component of the object and passes it's cost to the setCurBPM function
             setCurBPM(collidedEdge.GetComponent<EdgeScript>().costBPM);
+        }
+
+        // Gets the current node
+        if(col.gameObject.tag == ("Node"))
+        {
+            GameObject thisCurrentNode = col.gameObject;
+            CurrentNode = thisCurrentNode.GetComponent<VertexScript>();
         }
     }
 
 	// Sets the current BPM
 	void setCurBPM(int cost)
 	{
-
-		// TODO:: Create totalEdgeCostBPM[]. Store each cost into an array.
-		// EVery time actor traverses an edge, add 1 value to the currentBpm.
-		// Remove value from array.
-
-		//TODO: Instead of an array, use a queue (LIFO), so that an 
-		//currentBPM += (int)cost;
-
 		// TODO: Ask Erez how to scale the base cost value to BPM
 
 		// Gives both positive and negative numbers
