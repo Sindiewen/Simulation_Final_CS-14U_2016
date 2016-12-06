@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//[ExecuteInEditMode]
+[ExecuteInEditMode]
 public class EdgeScript : MonoBehaviour
 {
 
@@ -9,16 +9,6 @@ public class EdgeScript : MonoBehaviour
     [Header("Connected Vertices")]
     public VertexScript VertexA;
     public VertexScript VertexB;
-
-    /*
-    [Header("List Of Actors")]
-    public TravelerController ActorNeutral;
-    public TravelerController ActorHiker;
-    public TravelerController ActorBodyBuilder;
-    public TravelerController ActorFlorist;
-    public TravelerController ActorBusinessWorker;
-    */
-    
 
     [Header("Heartrate Cost")]
     public int costBPM;         // How much each edge is going to cost per movement
@@ -30,6 +20,8 @@ public class EdgeScript : MonoBehaviour
     [Range(-1f, 1f)] public float Beauty = 0f;
     [Range(-1f, 1f)] public float DirectRoute = 0f;
 
+
+    [Header("Edge Stretch")]
     // Weather the edge can stretch
     public bool Stretch = true;
 
@@ -38,6 +30,10 @@ public class EdgeScript : MonoBehaviour
 
     void Start()
     {
+        // Changes the name of each edge object to the coresponding edge location in 3D space
+        this.name = ("Edge: " + transform.position);
+
+
         /* SEE INSTRUCTIONS IN VertexScript.Start() REGARDING EDGE-VERTEX CONNECTIONS
 		 * if there is a problem with the links between edges and vertices in edit mode then
 		 * 1) enable this line of code and reload the scene to clear out the vertex links from the edges.
