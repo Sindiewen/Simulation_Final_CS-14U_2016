@@ -42,9 +42,6 @@ public class EdgeScript : MonoBehaviour
 
         Renderer renderer = GetComponent<Renderer>();
         renderer.sharedMaterial = singletons.GetComponent<GraphVisuals>().EdgeUnvisitedMaterial;
-
-
-
     }
 
     void Update()
