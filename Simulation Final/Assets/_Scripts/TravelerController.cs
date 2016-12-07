@@ -65,16 +65,10 @@ public class TravelerController : MonoBehaviour
     // Variables to start Dijkstra
     private bool dijkstraIsRunning;
     private bool dijkstraHasPath;
-    private bool hasReachedGoalNode = false;
 
     // If decrementing currentBPM has ran already
     private bool decrementHasRan;
- 
 
-    // Temp Values:
-    // For swapping node values
-    private VertexScript tempGoalNode;
-    private VertexScript tempStartNode;
 
 
 	void Start()
@@ -130,11 +124,10 @@ public class TravelerController : MonoBehaviour
 			{
 
                 // Checks if Dijkstra has already ran before
-                if (dijkstraIsRunning == false && dijkstraHasPath == false)
+                if (dijkstraIsRunning == false && dijkstraHasPath == false || GoalNode != CurrentNode)
                 {
                     // runs Dijkstra's algorithm
                     runDijkstra(ref StartNode, ref GoalNode);
-                    //path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
                 }
 
 				if (path != null && path.GetCurrentVertex () != null && StartAtStartNode)
@@ -143,23 +136,12 @@ public class TravelerController : MonoBehaviour
 					StartAtStartNode = false;
 				}
 			}
-
-
-
-
             // Sets the current node as the start node
             if (CurrentNode == GoalNode && dijkstraHasPath == true)
             {
-                StartNode = GoalNode;
-                //NextNode = null;
-                //CurrentNode = null;
                 dijkstraHasPath = false;
-            }
-            // If (The actor has arrived at the goal node)
-            // - Set startNode to Goal Node
-            //
-            
-            
+                StartNode = GoalNode;
+            }  
 		}
 		else
 		{
@@ -265,6 +247,7 @@ public class TravelerController : MonoBehaviour
             // Prints value to console
             Debug.Log("New CurrentBPM: " + currentBPM);
         }
+
         // Reruns dijkstra to ensure we get a newer, more updated path
         runDijkstra(ref CurrentNode, ref GoalNode);
 
@@ -283,6 +266,9 @@ public class TravelerController : MonoBehaviour
         {
             GameObject thisCurrentNode = col.gameObject;
             CurrentNode = thisCurrentNode.GetComponent<VertexScript>();
+
+            // Ensures each node traversed is a new start node. Allows nodes to change mid travel
+            StartNode = CurrentNode;
         }
     }
 

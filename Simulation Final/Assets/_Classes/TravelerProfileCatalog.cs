@@ -28,6 +28,7 @@ public class TravelerProfileCatalog
 
 	public static void Initialize()
 	{
+        // NOTE: Positive Good, Negitive Bad
 		//////////////////////////////////////////////
         // Neutral Actor: Base case
 		if (!profileDict.ContainsKey (TravelerType.Neutral))
@@ -38,25 +39,25 @@ public class TravelerProfileCatalog
         // Hiker
         if (!profileDict.ContainsKey (TravelerType.Hiker))
 		{
-			profileDict[TravelerType.Hiker] = new TravelerProfile (-1f, 0f, 0.25f, -1f);
+			profileDict[TravelerType.Hiker] = new TravelerProfile (1f, -1f, 0.5f, -1f);
 		}
 
         // Body Builder
         if (!profileDict.ContainsKey (TravelerType.BodyBuilder))
         {
-            profileDict[TravelerType.BodyBuilder] = new TravelerProfile();
+            profileDict[TravelerType.BodyBuilder] = new TravelerProfile(-1f, 1f, -1, 0f);
         }
 
         // Florist (Change from heart to florist)
 		if (!profileDict.ContainsKey (TravelerType.Florist))
 		{
-			profileDict[TravelerType.Florist] = new TravelerProfile (0.25f, -1f, 1f, -1f);
+			profileDict[TravelerType.Florist] = new TravelerProfile (0f, -1f, 1f, -1f);
 		}
 
         // Business Worker
         if (!profileDict.ContainsKey (TravelerType.BusinessWorker))
         {
-            profileDict[TravelerType.BusinessWorker] = new TravelerProfile();
+            profileDict[TravelerType.BusinessWorker] = new TravelerProfile(-1f, -1f, 0f, 1f);
         }
 		//////////////////////////////////////////////
 	}
