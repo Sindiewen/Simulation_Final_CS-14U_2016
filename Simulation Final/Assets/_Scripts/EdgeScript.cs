@@ -57,7 +57,7 @@ public class EdgeScript : MonoBehaviour
     {
         transform.position = Vector3.Lerp(vertexPositionA, vertexPositionB, 0.5f);
         Vector3 positionDifferences = vertexPositionB - vertexPositionA;
-        transform.localScale = new Vector3(0.25f, positionDifferences.magnitude * 0.5f, 0.25f);
+        transform.localScale = new Vector3(0.25f, positionDifferences.magnitude * 0.5f - 0.25f, 0.25f);
         transform.rotation = Quaternion.LookRotation(positionDifferences);
         transform.Rotate(90, 0, 0);
     }
