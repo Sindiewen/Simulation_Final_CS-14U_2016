@@ -31,7 +31,7 @@ public class EdgeScript : MonoBehaviour
     void Start()
     {
         // Changes the name of each edge object to the coresponding edge location in 3D space
-        this.name = ("Edge: " + transform.position);
+        //this.name = ("Edge: " + transform.position);
 
 
         /* SEE INSTRUCTIONS IN VertexScript.Start() REGARDING EDGE-VERTEX CONNECTIONS

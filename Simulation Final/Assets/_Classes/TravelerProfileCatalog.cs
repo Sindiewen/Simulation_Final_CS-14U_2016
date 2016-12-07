@@ -38,7 +38,7 @@ public class TravelerProfileCatalog
         // Hiker
         if (!profileDict.ContainsKey (TravelerType.Hiker))
 		{
-			profileDict[TravelerType.Hiker] = new TravelerProfile (1f, 0f, 0.25f, -1f);
+			profileDict[TravelerType.Hiker] = new TravelerProfile (-1f, 0f, 0.25f, -1f);
 		}
 
         // Body Builder

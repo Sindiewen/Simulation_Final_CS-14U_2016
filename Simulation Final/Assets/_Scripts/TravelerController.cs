@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
 public class TravelerController : MonoBehaviour 
 {
 
@@ -66,6 +65,7 @@ public class TravelerController : MonoBehaviour
     // Variables to start Dijkstra
     private bool dijkstraIsRunning;
     private bool dijkstraHasPath;
+    private bool hasReachedGoalNode = false;
 
     // If decrementing currentBPM has ran already
     private bool decrementHasRan;
@@ -88,14 +88,8 @@ public class TravelerController : MonoBehaviour
         // Dijkstra has does not have a path yet
         dijkstraHasPath = false;
 
-        
-
-
         // decrement has ran
         decrementHasRan = false;
-
-
-
 
 		// Calculates the actor's safe BPM
 		safeBPM = maxBPM - actorAge;
@@ -139,12 +133,9 @@ public class TravelerController : MonoBehaviour
                 if (dijkstraIsRunning == false && dijkstraHasPath == false)
                 {
                     // runs Dijkstra's algorithm
-                    runDijkstra();
+                    runDijkstra(ref StartNode, ref GoalNode);
+                    //path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
                 }
-
-
-                
-
 
 				if (path != null && path.GetCurrentVertex () != null && StartAtStartNode)
 				{
@@ -155,16 +146,20 @@ public class TravelerController : MonoBehaviour
 
 
 
-            /*
+
             // Sets the current node as the start node
-            if (CurrentNode == GoalNode && )
+            if (CurrentNode == GoalNode && dijkstraHasPath == true)
             {
                 StartNode = GoalNode;
+                //NextNode = null;
+                //CurrentNode = null;
+                dijkstraHasPath = false;
             }
             // If (The actor has arrived at the goal node)
             // - Set startNode to Goal Node
             //
-            */
+            
+            
 		}
 		else
 		{
@@ -215,13 +210,14 @@ public class TravelerController : MonoBehaviour
 
 
     // Moved running dijkstra inside this function to allow re-running easily
-    void runDijkstra()
+    void runDijkstra(ref VertexScript NodeA, ref VertexScript NodeB)
     {
         // Dijkstra is running
         dijkstraIsRunning = true;
 
         // either have no path yet or path data is stale (no longer correct) so get new path
-        path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
+        //path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
+        path = algorithm.GetPath(NodeA, NodeB, TravelerProfileCatalog.GetProfile(Type), CostMethod);
 
         //Dijkstra is not running
         dijkstraIsRunning = false;
@@ -234,7 +230,7 @@ public class TravelerController : MonoBehaviour
     void safeBPMCheck()
     {
         // If the currentBPM is >= to the maxBPM the actor can have
-        if (currentBPM >= maxBPM)
+        if (currentBPM >= maxBPM || StartNode == GoalNode)
         {
 
             // Sets the current node to the start node
@@ -270,7 +266,7 @@ public class TravelerController : MonoBehaviour
             Debug.Log("New CurrentBPM: " + currentBPM);
         }
         // Reruns dijkstra to ensure we get a newer, more updated path
-        runDijkstra();
+        runDijkstra(ref CurrentNode, ref GoalNode);
 
         // The actor can move again
         Move = true;
