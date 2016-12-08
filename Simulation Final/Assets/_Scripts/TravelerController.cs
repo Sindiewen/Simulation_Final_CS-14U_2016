@@ -47,17 +47,14 @@ public class TravelerController : MonoBehaviour
 	[Header("Node Locations")]
 	public VertexScript StartNode;		// Stores the start node
 	public VertexScript GoalNode;		// Stores the goal node
+	public VertexScript NextNode;	    // Stores the Next node
+    public VertexScript CurrentNode;    // Stores the current Node
+
 	public Vector3 FacingDirection;
 
 	/////////////////////////////////////////////////
 	//////* Private Variables - Do Not change *//////
 	/////////////////////////////////////////////////
-
-    // Private Node Values
-    private VertexScript NextNode;	    // Stores the Next node
-    private VertexScript CurrentNode;    // Stores the current Node
-
-
 
 	/* Private Heartrate Values */
 	// Dijkstra values
@@ -89,7 +86,7 @@ public class TravelerController : MonoBehaviour
         decrementHasRan = false;
 
 		// Calculates the actor's safe BPM
-		safeBPM = (maxBPM - actorAge) - 20;
+		safeBPM = maxBPM - actorAge;
 
 
 		//algorithm.Actor = this;
@@ -98,7 +95,7 @@ public class TravelerController : MonoBehaviour
 
 		// Sets the current bpm to the idle
 		currentBPM = idleDefaultBPM;
-		//Debug.Log("Start: " + currentBPM);
+		Debug.Log("Start: " + currentBPM);
 	}
 
     // Ensures when the game quits (either game window closed, or editor play mode ended...
@@ -248,15 +245,7 @@ public class TravelerController : MonoBehaviour
             currentBPM -= BPMDecrementValue;
 
             // Prints value to console
-            //Debug.Log("New CurrentBPM: " + currentBPM);
-        }
-        
-        // When the actor is currently sitting on the goal node and their currentBPM is >= their idle default BPM
-        while(CurrentNode == GoalNode && currentBPM >= idleDefaultBPM)
-        {
-            yield return new WaitForSeconds(actorIdleTime);
-
-            currentBPM -= BPMDecrementValue;
+            Debug.Log("New CurrentBPM: " + currentBPM);
         }
 
         // Reruns dijkstra to ensure we get a newer, more updated path

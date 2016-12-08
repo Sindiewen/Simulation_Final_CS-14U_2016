@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class VertexScript : MonoBehaviour
 {
-	public EdgeScript[] Edges = new EdgeScript[8];
+	public EdgeScript[] Edges = new EdgeScript[6];
 
 	void Start()
 	{
