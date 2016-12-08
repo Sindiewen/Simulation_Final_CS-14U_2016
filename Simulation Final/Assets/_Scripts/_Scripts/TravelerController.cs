@@ -12,7 +12,7 @@ public class TravelerController : MonoBehaviour
 
 	// Dropdown:
 	// Cost method for the actor's movement
-	public Dijkstra.CostMethodType CostMethod = Dijkstra.CostMethodType.DistanceTrue;
+	public Dijkstra.CostMethodType CostMethod = Dijkstra.CostMethodType.DistanceVertical;
 
 	// How fast the actor will move
 	[Range(0f, 10f)]public float Speed = 1;
@@ -21,21 +21,24 @@ public class TravelerController : MonoBehaviour
 	[Header("Actor Heartrate Values")]
 	public int actorAge;						// Stores the actor's current age
 
+    [HideInInspector]
 	public int currentBPM;					    // Stores the actor's current BPM
+    [HideInInspector]
 	public int idleDefaultBPM;				    // Stores the actor's idleBPM - DEFAULT BPM OF ACTOR
 												// The current BPM when the actor is doing nothing
 
 	[Range(40, 220)] public int maxBPM;			// Threshold: Stores a value of the actor's max BPM before they 
 												// can/cannot continue anymore untill they reach their idleBPM
 
-	public float actorIdleTime;		    			// Value for how many seconds to decrement a bpm
+	[Range(0, 5)] public float actorIdleTime;		// Value for how many seconds to decrement a bpm
 	[Range(1, 5)] public int BPMDecrementValue;		// How many BPM to decrement per second
 
+    [HideInInspector]
 	public int safeBPM;							// Stores the actor's safe BPM - their (maxBPM - actorAge)
 												// A value for when the actor feels "safe" to continue moving
 
-	[Range(0.01f, 1f)]
-	public float probabilityOfPreferedRoute;	// Using Percentages: How often an actor will take prefered route
+	//[Range(0.01f, 1f)]
+	//public float probabilityOfPreferedRoute;	// Using Percentages: How often an actor will take prefered route
 												// over harder route. Higher % = higher chance of harder route
 
 	// AI States
