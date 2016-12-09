@@ -37,3 +37,14 @@ This simulation simulates 5 different actor types acording to their Heartrate (B
 		Has an average heartrate, and will go no matter what. Even if it's a harder route.
 			- Average heartrate, gets exhausted easily.
 			- Get from point A to point B as efficient as possible.
+			
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+How To Use:
+	In the Hierarchy, there are 5 actors. Ech of them have:
+		- Age: The actors age.
+		- Max BPM: The Max BPM they can achieve before exhaustion.
+		- Actor Idle Time: How long in seconds the actor will decrease a BPM.
+		- BPM Decrement Value: How many BPM each Actor Idle Time the actor will loose a BPM.
+
+		- 
