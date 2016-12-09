@@ -30,8 +30,8 @@ public class TravelerController : MonoBehaviour
 	[Range(40, 220)] public int maxBPM;			// Threshold: Stores a value of the actor's max BPM before they 
 												// can/cannot continue anymore untill they reach their idleBPM
 
-	[Range(0, 5)] public float actorIdleTime;		// Value for how many seconds to decrement a bpm
-	[Range(1, 5)] public int BPMDecrementValue;		// How many BPM to decrement per second
+	[Range(1, 5)] public float actorIdleTime;		// Value for how many seconds to decrement a bpm
+	[Range(1, 10)] public int BPMDecrementValue;		// How many BPM to decrement per second
 
     [HideInInspector]
 	public int safeBPM;							// Stores the actor's safe BPM - their (maxBPM - actorAge)
@@ -50,18 +50,19 @@ public class TravelerController : MonoBehaviour
 	[Header("Node Locations")]
 	public VertexScript StartNode;		// Stores the start node
 	public VertexScript GoalNode;		// Stores the goal node
+
+
+	// Private Node Values
+	[HideInInspector]
+	public VertexScript NextNode;	    // Stores the Next node
+	[HideInInspector]
+	public VertexScript CurrentNode;    // Stores the current Node
+
 	public Vector3 FacingDirection;
 
 	/////////////////////////////////////////////////
 	//////* Private Variables - Do Not change *//////
 	/////////////////////////////////////////////////
-
-    // Private Node Values
-    private VertexScript NextNode;	    // Stores the Next node
-    private VertexScript CurrentNode;    // Stores the current Node
-
-
-
 	/* Private Heartrate Values */
 	// Dijkstra values
 	private const float DELTA = 0.01f; // any two values this close are effectively the same value
@@ -92,7 +93,7 @@ public class TravelerController : MonoBehaviour
         decrementHasRan = false;
 
 		// Calculates the actor's safe BPM
-		safeBPM = (maxBPM - actorAge) - 20;
+		safeBPM = (maxBPM - actorAge) - 15;
 
 
 		//algorithm.Actor = this;
@@ -133,7 +134,7 @@ public class TravelerController : MonoBehaviour
                 if (dijkstraIsRunning == false && dijkstraHasPath == false || GoalNode != CurrentNode)
                 {
                     // runs Dijkstra's algorithm
-                    runDijkstra(ref StartNode, ref GoalNode);
+					runDijkstra(ref StartNode, ref GoalNode, CostMethod);
                 }
 
 				if (path != null && path.GetCurrentVertex () != null && StartAtStartNode)
@@ -198,14 +199,14 @@ public class TravelerController : MonoBehaviour
 
 
     // Moved running dijkstra inside this function to allow re-running easily
-    void runDijkstra(ref VertexScript NodeA, ref VertexScript NodeB)
+	void runDijkstra(ref VertexScript NodeA, ref VertexScript NodeB, Dijkstra.CostMethodType costMethod)
     {
         // Dijkstra is running
         dijkstraIsRunning = true;
 
         // either have no path yet or path data is stale (no longer correct) so get new path
         //path = algorithm.GetPath(StartNode, GoalNode, TravelerProfileCatalog.GetProfile(Type), CostMethod);
-        path = algorithm.GetPath(NodeA, NodeB, TravelerProfileCatalog.GetProfile(Type), CostMethod);
+		path = algorithm.GetPath(NodeA, NodeB, TravelerProfileCatalog.GetProfile(Type), costMethod);
 
         //Dijkstra is not running
         dijkstraIsRunning = false;
@@ -262,8 +263,9 @@ public class TravelerController : MonoBehaviour
             currentBPM -= BPMDecrementValue;
         }
 
-        // Reruns dijkstra to ensure we get a newer, more updated path
-        runDijkstra(ref CurrentNode, ref GoalNode);
+        // Reruns dijkstra
+		// Trying a different cost type to ensure we get a newer, more updated path
+		runDijkstra(ref CurrentNode, ref GoalNode, Dijkstra.CostMethodType.UpSucksDownOkay);
 
         // The actor can move again
         Move = true;
