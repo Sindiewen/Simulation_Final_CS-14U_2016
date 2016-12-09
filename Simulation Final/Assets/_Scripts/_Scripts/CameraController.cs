@@ -12,9 +12,9 @@ public class CameraController : MonoBehaviour
 	{
 
 		// Ensures valures are not 0
-		float deltaX = Input.GetAxis ("Horizontal");
-		float deltaY = Input.GetAxis ("Vertical");
-		float deltaZoom = Input.GetAxis ("Zoom");
+		float deltaX = Input.GetAxis ("CameraPanHorizontal");
+		float deltaY = Input.GetAxis ("CameraPanVertical");
+		float deltaZoom = Input.GetAxis ("CameraZoom");
 
 		if (deltaX != 0 || deltaY != 0)
 		{

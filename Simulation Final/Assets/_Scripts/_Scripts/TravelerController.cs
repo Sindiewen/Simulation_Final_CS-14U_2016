@@ -24,7 +24,7 @@ public class TravelerController : MonoBehaviour
 
     [HideInInspector]
 	public int currentBPM;					    // Stores the actor's current BPM
-    [HideInInspector]
+    
 	public int idleDefaultBPM;				    // Stores the actor's idleBPM - DEFAULT BPM OF ACTOR
 												// The current BPM when the actor is doing nothing
 
