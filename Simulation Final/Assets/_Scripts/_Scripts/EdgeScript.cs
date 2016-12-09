@@ -10,6 +10,11 @@ public class EdgeScript : MonoBehaviour
     public VertexScript VertexA;
     public VertexScript VertexB;
 
+    [HideInInspector]
+    public Vector3 NodeA;
+    [HideInInspector]
+    public Vector3 NodeB;
+
     [Header("Heartrate Cost")]
     public int costBPM;         // How much each edge is going to cost per movement
 
@@ -40,8 +45,16 @@ public class EdgeScript : MonoBehaviour
 
         GameObject singletons = GameObject.Find("Singletons");
 
+        
         Renderer renderer = GetComponent<Renderer>();
         renderer.sharedMaterial = singletons.GetComponent<GraphVisuals>().EdgeUnvisitedMaterial;
+
+        // Creates a Cost by getting the distance between the edges 2 adjacent nodes
+        NodeA = VertexA.GetComponent<Transform>().localPosition;
+        NodeB = VertexB.GetComponent<Transform>().localPosition;
+
+        costBPM = (int)Vector3.Distance(VertexA.GetComponent<Transform>().localPosition, VertexB.GetComponent<Transform>().localPosition);
+        
     }
 
     void Update()
