@@ -12,6 +12,7 @@ public class TravelerController : MonoBehaviour
 
 	// Dropdown:
 	// Cost method for the actor's movement
+	[HideInInspector]
 	public Dijkstra.CostMethodType CostMethod = Dijkstra.CostMethodType.DistanceVertical;
 
 	// How fast the actor will move
