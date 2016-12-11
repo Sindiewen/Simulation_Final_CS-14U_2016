@@ -32,7 +32,7 @@ public class SystemControlTime : MonoBehaviour
 			// 3 = 3X Speed
 
 			// Ensures the timescale gets changed at runtime.
-			Time.timeScale = TimescaleSlider.value;
+			Time.timeScale = TimescaleSlider.value * 0.25f;
 		}
 
 		// Prints the current timescale value

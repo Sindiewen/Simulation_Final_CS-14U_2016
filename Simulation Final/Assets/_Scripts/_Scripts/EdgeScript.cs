@@ -46,7 +46,7 @@ public class EdgeScript : MonoBehaviour
 
         // Creates a Cost by getting the distance between the edges 2 adjacent nodes
 		// NOTE: Should only be ran once. Once the edge cost between the nodes have been calculated, comment this line out.
-        //costBPM = (int)Vector3.Distance(VertexA.GetComponent<Transform>().localPosition, VertexB.GetComponent<Transform>().localPosition) + 4;
+        costBPM = (int)Vector3.Distance(VertexA.GetComponent<Transform>().localPosition, VertexB.GetComponent<Transform>().localPosition) + 2;
         
     }
 
