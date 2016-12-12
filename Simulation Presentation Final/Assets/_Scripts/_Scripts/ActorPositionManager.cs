@@ -36,8 +36,6 @@ public class ActorPositionManager : MonoBehaviour {
 
 	// Private Variables
 
-	//private Vector3 offset;
-		
 
 
 
@@ -85,10 +83,10 @@ public class ActorPositionManager : MonoBehaviour {
 		}
 
 		// Prints the actor in first place
-		uiPosText.text = actorInFirst.name;
+		uiPosText.text = "First: " + actorInFirst.name;
 
-		// Gets the offset value for the first person camera
-		//offset = firstPlaceCam.transform.position - actorInFirst.transform.position;
+        // Changes the color of the position text respectivley by the color of the leading actor
+        uiPosText.color = actorInFirst.GetComponentInChildren<MeshRenderer>().material.color;
 	}
 
 	// Garunteed to run after everythuing has been ran inside of update
