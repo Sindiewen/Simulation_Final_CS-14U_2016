@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ActorPositionManager : MonoBehaviour {
@@ -22,25 +22,38 @@ public class ActorPositionManager : MonoBehaviour {
 	[Header("Racing Mode Toggle")]
 	public bool RacingMode;					// Checkbox - Weather the actors are going to race to the goal node or not
 
-	[Header("List of actors")]
+	[Header("Simulation Tools")]
 	public TravelerController[] Actors;		// Array of actors to compare
-
-	[Header("The Goal Node")]
 	public VertexScript GoalNode;			// Stores the goal node	
 
 	[Header("UI Position Text")]
 	public Text uiPosText;					// Stores refrence to the UI Text Game object - prints the actor in 1st
 
-	[Header("1st Place Camera")]
-	public Camera firstPlaceCam;			// Camera to view the leader actor
+	[Header("Camera Control")]
+ 	public Camera firstPlaceCam;            // Camera to view the leader actor
+    //public Camera midPlaceCam;              // Camera to view the midpoint of the group
 
-	// Private Variables
+    // Private Variables
+    
+    // Stores the current min distance - the closest actor to the goal node
+    float actorMinDistance = Mathf.Infinity;
+
+    // Stores the current max distance
+    //float actorMaxDistance = Mathf.Infinity;
+        
+    /*
+    // Array of actors in their respective positions
+    private TravelerController[] actorPositionArray;
 
 
+    // 0th element = closest to goal
+    // last element = farthest from goal
+    // Array of total actor distances
+    private float[] actorDistances;
+    */
 
+    private TravelerController actorInFirst;		// Stores the current actor in first place
 
-	// Private Variables
-	private TravelerController actorInFirst;		// Stores the current actor in first place
 
 	// Use this for initialization
 	void Start () 
@@ -55,8 +68,19 @@ public class ActorPositionManager : MonoBehaviour {
 				Actors[i].GoalNode = GoalNode;
 			}
 
-			// Ensure the UI has the places of each actor
-		}
+            /*
+            // Initializes the Actor Array and the Distances Array
+            actorPositionArray = new TravelerController[Actors.Length];
+            actorDistances = new float[Actors.Length];
+
+            // Sets all the actorDistance values to mathf.infinity
+            for (int i = 0; i < actorDistances.Length; i++)
+            {
+                actorDistances[i] = Mathf.Infinity;
+            }*/
+
+            // Ensure the UI has the places of each actor
+        }
 		// Else, turn off racing mode
 
 	
@@ -65,11 +89,11 @@ public class ActorPositionManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		// Stores the current min distance - the closest actor to the goal node
-		float actorMinDistance = Mathf.Infinity;
+		
 
 		for (int i = 0; i < Actors.Length; i++)
 		{
+            
 			// If the actors current position - the goal nodes position is < minDistance
 			if (Vector3.Distance(Actors[i].transform.position, GoalNode.transform.position) < actorMinDistance)
 			{
@@ -78,21 +102,27 @@ public class ActorPositionManager : MonoBehaviour {
 
 				// Stores the minimum distance
 				actorMinDistance = Vector3.Distance(Actors[i].transform.position, GoalNode.transform.position);
-
 			}
-		}
+            
+        }
 
-		// Prints the actor in first place
-		uiPosText.text = "First: " + actorInFirst.name;
+        // Prints the actor in first place
+        uiPosText.text = "First: " + actorInFirst;
 
         // Changes the color of the position text respectivley by the color of the leading actor
         uiPosText.color = actorInFirst.GetComponentInChildren<MeshRenderer>().material.color;
-	}
+    }
 
 	// Garunteed to run after everythuing has been ran inside of update
 	void LateUpdate()
 	{
+        //Vector3 midpointOffset;
+
 		// moves the camera to the location of the first place actor
 		firstPlaceCam.transform.position = actorInFirst.transform.position + Vector3.up * 15;
+
+        // Moves the camera to the midpoint of the group
+        //midpointOffset = actorPositionArray[0].transform.position - actorPositionArray[4].transform.position;
+        //midPlaceCam.transform.position = midpointOffset + Vector3.up * 15;
 	}
 }
