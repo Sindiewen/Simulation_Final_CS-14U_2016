@@ -9,6 +9,9 @@ public class GUIActorBPMDisplay : MonoBehaviour
 	public Text GUIBPMMaxText;			// Stores a reference to the UI Text GameObject for Max BPM Text
 	public Text GUIBPMSafeText;			// Stores a reference to the UI Text GameObject for Safe BPM Text
 
+
+	public Text GUIPosition;			// Stores a reference to the UI Text GameObject for what Position they're in
+
 	// private variables
 	private TravelerController Actor;	// Object of the Traveler Controlle Class
 
