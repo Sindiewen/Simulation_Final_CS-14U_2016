@@ -33,6 +33,10 @@ public class ActorPositionManager : MonoBehaviour
 	[Header("Camera Control")]
  	public Camera firstPlaceCam;            // Camera to view the leader actor
 
+
+	[HideInInspector]
+	public TravelerController actorInFirst;		// Stores the current actor in first place
+
     // Private Variables
     
     // Stores the current min distance - the closest actor to the goal node
@@ -40,22 +44,37 @@ public class ActorPositionManager : MonoBehaviour
 
     // Stores the current max distance
 
-    private TravelerController actorInFirst;		// Stores the current actor in first place
+    
+
+	private bool ActorReachedGoalNode;
+	private bool actorRunOnce;
+
+	private bool resetActorsGoalNode;
 
 
 	// Use this for initialization
 	void Start () 
 	{
+
+
 		// If the simulation is in racing mode
 		if (RacingMode)
 		{
-			// Set each actor to the same goal node so we can race each actor to the finish
-			for (int i = 0; i < Actors.Length; i++)
+
+			resetActorsGoalNode = true;
+			
+			if (resetActorsGoalNode)
 			{
-				// Sets each actor's goal node to this goal node
-				Actors[i].GoalNode = GoalNode;
+				goalNodeReset();
 			}
 
+			ActorReachedGoalNode = false;
+			actorRunOnce = false;
+
+			for (int i = 0; i < Actors.Length; i++)
+			{				
+				Actors[i].GetComponent<GUIActorBPMDisplay>().GUIWinCount.text = "Wins: " + Actors[i].GetComponent<GUIActorBPMDisplay>().winCount;
+			}
             // Ensure the UI has the places of each actor
         }
 		// Else, turn off racing mode
@@ -66,13 +85,14 @@ public class ActorPositionManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		
+		//TODO : Reset actorMinDistance to infinity when the winning actor reached the goal node
+		// 
 
 		for (int i = 0; i < Actors.Length; i++)
 		{
             
 			// If the actors current position - the goal nodes position is < minDistance
-			if (Vector3.Distance(Actors[i].transform.position, GoalNode.transform.position) < actorMinDistance)
+			if (Vector3.Distance(Actors[i].transform.position, GoalNode.transform.position) < actorMinDistance && ActorReachedGoalNode == false)
 			{
 				// Actor in first is the current actor
 				actorInFirst = Actors[i];
@@ -84,10 +104,38 @@ public class ActorPositionManager : MonoBehaviour
         }
 
         // Prints the actor in first place
-        uiPosText.text = "First: " + actorInFirst;
+        uiPosText.text = "1st: " + actorInFirst;
 
         // Changes the color of the position text respectivley by the color of the leading actor
         uiPosText.color = actorInFirst.GetComponentInChildren<MeshRenderer>().material.color;
+
+
+		// If the actor is in first place and they reached the goal node
+		if (actorInFirst.CurrentNode == GoalNode)
+		{
+			ActorReachedGoalNode = true;
+			resetActorsGoalNode = true;
+
+
+			if (ActorReachedGoalNode == true && actorRunOnce == true)
+			{
+				//Debug.Log(actorInFirst + "Has won");
+				actorInFirst.GetComponent<GUIActorBPMDisplay>().addToWinCount();
+				//actorInFirst.GetComponent<GUIActorBPMDisplay>().GUIWinCount.text = "Wins: " + actorInFirst.GetComponent<GUIActorBPMDisplay>().winCount + 1;
+				//actorMinDistance = Mathf.Infinity;
+				ActorReachedGoalNode = actorRunOnce = false;
+			}
+		}
+		else
+		{
+			//ActorReachedGoalNode = false;
+			actorRunOnce = true;
+			goalNodeReset();
+		}
+
+		// If the actors have a new goal node
+
+
     }
 
 	// Garunteed to run after everythuing has been ran inside of update
@@ -96,5 +144,24 @@ public class ActorPositionManager : MonoBehaviour
 		// moves the camera to the location of the first place actor
 		firstPlaceCam.transform.position = actorInFirst.transform.position + Vector3.up * 15;
 
+	}
+
+	void goalNodeReset()
+	{
+		// if actors has new goal node
+
+		// Set each actor to the same goal node so we can race each actor to the finish
+		for (int i = 0; i < Actors.Length; i++)
+		{
+			if (Actors[i].StartNode != GoalNode)
+			{
+				ActorReachedGoalNode = false;
+			}
+
+			// Sets each actor's goal node to this goal node
+			Actors[i].GoalNode = GoalNode;
+			actorMinDistance = Mathf.Infinity;
+			resetActorsGoalNode = false;
+		} 
 	}
 }

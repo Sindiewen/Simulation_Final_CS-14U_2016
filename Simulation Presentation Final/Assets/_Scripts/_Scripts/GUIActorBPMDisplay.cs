@@ -10,7 +10,10 @@ public class GUIActorBPMDisplay : MonoBehaviour
 	public Text GUIBPMSafeText;			// Stores a reference to the UI Text GameObject for Safe BPM Text
 
 
-	public Text GUIPosition;			// Stores a reference to the UI Text GameObject for what Position they're in
+	public Text GUIWinCount;			// Stores a reference to the UI Text GameObject for what Position they're in
+
+	[HideInInspector]
+	public int winCount = 0;
 
 	// private variables
 	private TravelerController Actor;	// Object of the Traveler Controlle Class
@@ -32,5 +35,11 @@ public class GUIActorBPMDisplay : MonoBehaviour
 		// Changes the SafeBPM Text to show the safe BPM of the actor
 		GUIBPMSafeText.text = Actor.safeBPM.ToString();
 
+	}
+
+	public void addToWinCount()
+	{
+		winCount ++;
+		GUIWinCount.text = "Wins: " + winCount;
 	}
 }

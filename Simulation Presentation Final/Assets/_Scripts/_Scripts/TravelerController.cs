@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class TravelerController : MonoBehaviour 
 {
@@ -41,6 +42,9 @@ public class TravelerController : MonoBehaviour
 	//[Range(0.01f, 1f)]
 	//public float probabilityOfPreferedRoute;	// Using Percentages: How often an actor will take prefered route
 												// over harder route. Higher % = higher chance of harder route
+	[Header("Win Count GUI Display")]
+	public Text winCount;
+
 
 	// AI States
 	[Header("AI States")]
