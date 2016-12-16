@@ -47,9 +47,16 @@ public class EdgeScript : MonoBehaviour
         // Creates a Cost by getting the distance between the edges 2 adjacent nodes
 		// NOTE: Should only be ran once. Once the edge cost between the nodes have been calculated, comment this line out.
         costBPM = (int)Vector3.Distance(VertexA.GetComponent<Transform>().localPosition, VertexB.GetComponent<Transform>().localPosition) + 2;
+
+		// Stretches the edges between the nodes
+		//ToStretch();
         
     }
 
+	// NOTE: Was formerly void Update()
+	// Changed it to it's own function because of during simulation performance issues of getting
+	// less than optimal framerates (averaging 15FPS on my laptop).
+	// Can be changed back to Update() to return it back to normal
     void Update()
     {
         if (Stretch && VertexA && VertexB)

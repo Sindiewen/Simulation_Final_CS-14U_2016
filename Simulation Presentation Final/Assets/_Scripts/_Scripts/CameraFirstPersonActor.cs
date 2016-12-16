@@ -62,7 +62,7 @@ public class CameraFirstPersonActor : MonoBehaviour
 		else if (businessToggle == true)
 		{
 			this.transform.position = Actors[4].transform.position + Vector3.up * 2;
-			transform.rotation = Actors[5].transform.rotation;
+			transform.rotation = Actors[4].transform.rotation;
 		}
 	}
 

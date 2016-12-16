@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour 
 {
 
 	// Public Variables
 	public float PanSpeed = 1.0f;
-
 
 	void Update()
 	{
@@ -29,8 +29,6 @@ public class CameraController : MonoBehaviour
 			Camera.main.orthographicSize += deltaZoom;	// For orthographic
 			Camera.main.fieldOfView += deltaZoom;		// for perspective
 		}
-	
 	}
-
 
 }
